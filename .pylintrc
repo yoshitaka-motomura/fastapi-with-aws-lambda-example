@@ -3,6 +3,7 @@ disable=
     C0111, # Missing docstring
     C0103, # Invalid constant name
     R0903, # Too few public methods
+    W0622, # Redefining built-in
 
 [FORMAT]
 max-line-length=120
