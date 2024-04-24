@@ -4,6 +4,21 @@ from fastapi import FastAPI
 from mangum import Mangum
 from strawberry.fastapi import GraphQLRouter
 
+"""
+This is a simple example of a GraphQL API using Strawberry and FastAPI.
+If you use AWS, it might be better to choose AppSync
+"""
+app = FastAPI()
+
+
+# @app.middleware("http")
+# async def add_cors_header(request, call_next):
+#     print("request")
+#     response = await call_next(request)
+#     response.headers["Access-Control-Allow-Origin"] = "*"
+#     response.headers["Access-Control-Allow-Headers"] = "*"
+#     return response
+
 
 @strawberry.type
 class Memo:
@@ -32,10 +47,9 @@ class Query:
 schema = strawberry.Schema(query=Query)
 
 """
-playground enabled argument is `graphiql = True` by default
+playground disable argument is `graphql_ide=None`
 """
-graphql_app = GraphQLRouter(schema, graphiql=False)
+graphql_app = GraphQLRouter(schema, graphql_ide=None)
 
-app = FastAPI()
 app.include_router(graphql_app, prefix="/graphql")
 handler = Mangum(app)
