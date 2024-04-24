@@ -1,5 +1,6 @@
 # Python FastAPI on AWS Lambda with CDK
-
+[![Python Test](https://github.com/yoshitaka-motomura/fastapi-with-aws-lambda-example/actions/workflows/python-ci.yml/badge.svg)](https://github.com/yoshitaka-motomura/fastapi-with-aws-lambda-example/actions/workflows/python-ci.yml)
+[![Coverage Status](https://coveralls.io/repos/github/yoshitaka-motomura/fastapi-with-aws-lambda-example/badge.svg?branch=main)](https://coveralls.io/github/yoshitaka-motomura/fastapi-with-aws-lambda-example?branch=main)
 ## Overview
 This project is a demonstration of how to deploy a Python FastAPI application on AWS Lambda using the AWS Cloud Development Kit (CDK).
 
