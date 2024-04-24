@@ -31,8 +31,10 @@ class Query:
 
 schema = strawberry.Schema(query=Query)
 
-graphql_app = GraphQLRouter(schema)
-
+"""
+playground enabled argument is `graphiql = True` by default
+"""
+graphql_app = GraphQLRouter(schema, graphiql=False)
 
 app = FastAPI()
 app.include_router(graphql_app, prefix="/graphql")
