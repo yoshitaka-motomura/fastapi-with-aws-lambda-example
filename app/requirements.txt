@@ -13,3 +13,4 @@ typing_extensions==4.11.0
 uvicorn==0.29.0
 strawberry-graphql==0.227.2
 graphql-core==3.2.3
+pymongo~=4.7.0

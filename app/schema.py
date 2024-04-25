@@ -1,22 +1,37 @@
 import typing
 import strawberry
-from .models import Memo
+from models import Memo
+from database import get_db
+
 
 # Query resolvers for the GraphQL API.
 
-
-def get_memo() -> object:
-    return [
-        Memo(id=1, title="Memo 1", description="Description 1"),
-        Memo(id=2, title="Memo 2", description="Description 2"),
-    ]
-
-
-def get_memo_by_id(id: int):
-    return Memo(id=id, title=f"Memo {id}", description=f"Description {id}")
+def get_memo(limit: typing.Optional[int] = 10) -> typing.List[Memo]:
+    db = get_db()
+    collection = db['memos']
+    ret = []
+    for memo in collection.find({}).limit(limit):
+        ret.append(Memo(id=memo['_id'], title=memo['title'], description=memo['description']))
+    return ret
 
 
+def get_memo_by_id(id: str):
+    db = get_db()
+    collection = db['memos']
+    memo = collection.find_one({'_id': id})
+    if memo:
+        return Memo(id=memo['_id'], title=memo['title'], description=memo['description'])
+    else:
+        return None
+
+
+# Query type for the GraphQL API.
 @strawberry.type
 class Query:
-    memos: typing.List[Memo] = strawberry.field(resolver=get_memo)
-    memo: Memo = strawberry.field(resolver=get_memo_by_id)
+    @strawberry.field
+    def memos(self, limit: typing.Optional[int] = 10) -> typing.List[Memo]:
+        return get_memo(limit)
+
+    @strawberry.field
+    def memo(self, id: str) -> typing.Optional[Memo]:
+        return get_memo_by_id(id)

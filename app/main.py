@@ -1,8 +1,9 @@
+import os
 import strawberry
 from fastapi import FastAPI
 from mangum import Mangum
 from strawberry.fastapi import GraphQLRouter
-from .schema import Query
+from schema import Query
 
 
 app = FastAPI()
