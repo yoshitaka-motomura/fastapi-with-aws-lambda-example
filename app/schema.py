@@ -1,7 +1,9 @@
 import typing
+
 import strawberry
-from models import Memo
+
 from database import get_db
+from models import Memo
 
 
 # Query resolvers for the GraphQL API.
@@ -21,8 +23,7 @@ def get_memo_by_id(id: str):
     memo = collection.find_one({'_id': id})
     if memo:
         return Memo(id=memo['_id'], title=memo['title'], description=memo['description'])
-    else:
-        return None
+    return None
 
 
 # Query type for the GraphQL API.

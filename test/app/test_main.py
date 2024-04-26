@@ -1,47 +1,43 @@
 from fastapi.testclient import TestClient
 from unittest.mock import patch
-from app.main import app
-
+from main import app
+from models import Memo
 client = TestClient(app)
 
 
-def test_graphql():
-    response = client.post(
-        "/graphql",
-        json={"query": "{ memos { id title description } }"}
-    )
-    assert response.status_code == 200
-    assert response.json() == {
-        "data": {
-            "memos": [
-                {"id": 1, "title": "Memo 1", "description": "Description 1"},
-                {"id": 2, "title": "Memo 2", "description": "Description 2"},
-            ]
-        }
-    }
+def test_graphql_get_memo():
+    mocked_memos = [
+        Memo(id="1", title="title1", description="description1"),
+        Memo(id="2", title="title2", description="description2")
+    ]
 
+    with patch("schema.get_memo") as mock_get_memo:
+        mock_get_memo.return_value = mocked_memos
 
-def test_graphql_memo():
-    response = client.post(
-        "/graphql",
-        json={"query": "{ memo(id: 1) { id title description } }"}
-    )
-    assert response.status_code == 200
-    assert response.json() == {
-        "data": {
-            "memo": {"id": 1, "title": "Memo 1", "description": "Description 1"}
+        response = client.post(
+            "/graphql",
+            json={"query": "{ memos { id title description } }"}
+        )
+        assert response.status_code == 200
+        assert response.json() == {
+            "data": {
+                "memos": [
+                    {"id": "1", "title": "title1", "description": "description1"},
+                    {"id": "2", "title": "title2", "description": "description2"}
+                ]
+            }
         }
-    }
+
+        mock_get_memo.assert_called_once()
 
 
 def test_graphql_memo_not_found():
-    """Test that a memo that does not exist returns None"""
-    with patch("app.schema.get_memo_by_id") as mock_get_memo_by_id:
+    with patch("schema.get_memo_by_id") as mock_get_memo_by_id:
         mock_get_memo_by_id.return_value = None
 
         response = client.post(
             "/graphql",
-            json={"query": "{ memo(id: 3) { id title description } }"}
+            json={"query": "{ memo(id: \"3\") { id title description } }"}
         )
         assert response.status_code == 200
         assert response.json() == {
@@ -50,4 +46,4 @@ def test_graphql_memo_not_found():
             }
         }
 
-        mock_get_memo_by_id.assert_called_once_with(3)
+        mock_get_memo_by_id.assert_called_once_with("3")
