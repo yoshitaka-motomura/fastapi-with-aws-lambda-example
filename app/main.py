@@ -2,11 +2,12 @@ import strawberry
 from fastapi import FastAPI
 from mangum import Mangum
 from strawberry.fastapi import GraphQLRouter
-from schema import Query
+import queries.query
+import mutations.mutation
 
 app = FastAPI()
 
-schema = strawberry.Schema(query=Query)
+schema = strawberry.Schema(query=queries.query.Query, mutation=mutations.mutation.Mutation)
 
 graphql_app = GraphQLRouter(schema, graphql_ide="graphiql")
 
