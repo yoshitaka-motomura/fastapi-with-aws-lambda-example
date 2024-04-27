@@ -53,6 +53,30 @@ FastAPI is a modern, fast (high-performance), web framework for building APIs wi
 | lib | Contains the CDK application code |
 | lib/app-stack.ts | CDK application code |
 
+## Command
+
+**Development Hot reload FastAPI Uvicorn server**
+> [!NOTE]
+> It must be launched with the same path as the configuration deployed with Lambda.
+
+```bash
+cd app && uvicorn main:app --reload
+```
+
+---
+**Pylint**
+
+```bash
+pipenv run lint
+```
+
+---
+**Unit Test**
+
+```bash
+pipenv run test
+```
+
 ---
 ## References
 - [FastAPI](https://fastapi.tiangolo.com/)
